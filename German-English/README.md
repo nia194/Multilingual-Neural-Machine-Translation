@@ -41,7 +41,7 @@
 <tbody>
   <tr>
     <td>Simple RNN/GRU</td>
-    <td>0.7041>/td>
+    <td>0.7041</td>
     <td>0.372056</td>
     <td>0.447902</td>
     <td>0.406180</td>
