@@ -41,38 +41,38 @@
 <tbody>
   <tr>
     <td>Simple RNN/GRU</td>
-    <td>0.7041</td>
-    <td>0.372056</td>
-    <td>0.447902</td>
-    <td>0.406180</td>
+    <td>0.70</td>
+    <td>0.37</td>
+    <td>0.45</td>
+    <td>0.41</td>
   </tr>
   <tr>
     <td>Simple RNN/GRU with Embedding</td>
-    <td>0.8061</td>
-    <td>0.558837</td>
-    <td>0.668223</td>
-    <td>0.608150</td>
+    <td><b>0.81</b></td>
+    <td>0.56</td>
+    <td>0.67</td>
+    <td>0.61</td>
   </tr>
   <tr>
     <td>LSTM with Embedding</td>
-    <td>0.8054</td>
-    <td><b>0.577381</b></td>
-    <td><b>0.689327</b></td>
-    <td><b>0.627894</b></td>
+    <td><b>0.81</b></td>
+    <td><b>0.58</b></td>
+    <td><b>0.69</b></td>
+    <td><b>0.63</b></td>
   </tr>
   <tr>
     <td>Bidirectional-LSTM</td>
-    <td><b>0.8140</b></td>
-    <td>0.555476</td>
-    <td>0.663686</td>
-    <td>0.604267</td>
+    <td><b>0.81</b></td>
+    <td>0.56</td>
+    <td>0.66</td>
+    <td>0.60</td>
   </tr>
   <tr>
     <td>RNN/GRU based Encoder-Decoder</td>
-    <td>0.6966</td>
-    <td>0.346580</td>
-    <td>0.409116</td>
-    <td>0.375073</td>
+    <td>0.70</td>
+    <td>0.35</td>
+    <td>0.41</td>
+    <td>0.38</td>
   </tr>
 </tbody>
 </table>
