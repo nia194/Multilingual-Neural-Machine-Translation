@@ -31,48 +31,48 @@
 <table class="tg">
 <thead>
   <tr>
-    <th class="tg-fymr">Model</th>
-    <th class="tg-fymr">Accuracy</th>
-    <th class="tg-fymr">Precision/BLEU Score</th>
-    <th class="tg-fymr">Recall/ROUGE Score</th>
-    <th class="tg-fymr">F1-Score</th>
+    <th><b>Model</b></th>
+    <th><b>Accuracy</b></th>
+    <th><b>Precision/BLEU Score</b></th>
+    <th><b>Recall/ROUGE Score</b></th>
+    <th><b>F1-Score</b></th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td class="tg-0pky">Simple RNN/GRU</td>
-    <td class="tg-0pky"><span style="font-weight:400;font-style:normal">0.7041</span></td>
-    <td class="tg-0pky"><span style="font-weight:400;font-style:normal">0.372056</span></td>
-    <td class="tg-0pky">0.447902</td>
-    <td class="tg-0pky">0.406180</td>
+    <td>Simple RNN/GRU</td>
+    <td>0.7041>/td>
+    <td>0.372056</td>
+    <td>0.447902</td>
+    <td>0.406180</td>
   </tr>
   <tr>
-    <td class="tg-0pky">Simple RNN/GRU with Embedding</td>
-    <td class="tg-0pky"><span style="font-weight:400;font-style:normal">0.8061</span><br></td>
-    <td class="tg-0pky">0.558837</td>
-    <td class="tg-0pky">0.668223</td>
-    <td class="tg-0pky">0.608150</td>
+    <td>Simple RNN/GRU with Embedding</td>
+    <td>0.8061</td>
+    <td>0.558837</td>
+    <td>0.668223</td>
+    <td>0.608150</td>
   </tr>
   <tr>
-    <td class="tg-0pky">LSTM with Embedding</td>
-    <td class="tg-0pky"><span style="font-weight:400;font-style:normal">0.8054</span></td>
-    <td class="tg-fymr">0.577381</td>
-    <td class="tg-fymr">0.689327</td>
-    <td class="tg-fymr">0.627894</td>
+    <td>LSTM with Embedding</td>
+    <td>0.8054</td>
+    <td><b>0.577381</b></td>
+    <td><b>0.689327</b></td>
+    <td><b>0.627894</b></td>
   </tr>
   <tr>
-    <td class="tg-0pky">Bidirectional-LSTM</td>
-    <td class="tg-fymr"><span style="font-weight:bold;font-style:normal">0.8140</span></td>
-    <td class="tg-0pky">0.555476</td>
-    <td class="tg-0pky">0.663686</td>
-    <td class="tg-0pky">0.604267</td>
+    <td>Bidirectional-LSTM</td>
+    <td><b>0.8140</b></td>
+    <td>0.555476</td>
+    <td>0.663686</td>
+    <td>0.604267</td>
   </tr>
   <tr>
-    <td class="tg-0pky">RNN/GRU based Encoder-Decoder</td>
-    <td class="tg-0pky"><span style="font-weight:400;font-style:normal">0.6966</span></td>
-    <td class="tg-0pky">0.346580</td>
-    <td class="tg-0pky">0.409116</td>
-    <td class="tg-0pky">0.375073</td>
+    <td>RNN/GRU based Encoder-Decoder</td>
+    <td>0.6966</td>
+    <td>0.346580</td>
+    <td>0.409116</td>
+    <td>0.375073</td>
   </tr>
 </tbody>
 </table>
