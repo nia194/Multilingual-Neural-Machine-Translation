@@ -1,11 +1,10 @@
 # Multilingual Neural Machine Translation
 
-<video width="320" height="240" controls>
-  <source src="path/to/video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-![Example Image](/images/drone_detection_network_cameras.png)
+Hi How are you.
+Hallo, wie geht es dir.
+Ciao, come stai.
+Salut comment ça va.
+こんにちは、元気ですか。
 
 ## Description 
 
