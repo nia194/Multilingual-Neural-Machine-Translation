@@ -1,10 +1,10 @@
 # Multilingual Neural Machine Translation
 
-Hi How are you.
-Hallo, wie geht es dir.
-Ciao, come stai.
-Salut comment ça va.
-こんにちは、元気ですか。
+English: Hi, How are you.
+German: Hallo, wie geht es dir.
+Italian: Ciao, come stai.
+French: Salut comment ça va.
+Japanese: こんにちは、元気ですか。
 
 ## Description 
 
