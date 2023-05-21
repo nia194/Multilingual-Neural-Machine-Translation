@@ -125,38 +125,28 @@ Also, remember that when we refer to a "word," we really mean the _vector repres
 
 ##### &nbsp;
 
-### Bidirectional Layer
+## Bidirectional Layer
+
 Now that we understand how context flows through the network via the hidden state, let's take it a step further by allowing that context to flow in both directions. This is what a bidirectional layer does.
 
-<img src="images/yoda.jpg" width="40%" align="right" alt="" title="Yoda" />
+In the example above, the encoder only has historical context. But providing future context can result in better model performance. This may seem counterintuitive to the way humans process language since we only read in one direction. However, humans often require future context to interpret what is being said. In other words, sometimes we don't understand a sentence until an important word or phrase is provided at the end. This happens whenever Yoda speaks. 😑 🙏
 
-In the example above, the encoder only has historical context. But, providing future context can result in better model performance. This may seem counterintuitive to the way humans process language, since we only read in one direction. However, humans often require future context to interpret what is being said. In other words, sometimes we don't understand a sentence until an important word or phrase is provided at the end. Happens this does whenever Yoda speaks. :expressionless: :pray:
+To implement this, we train two RNN layers simultaneously. The first layer is fed the input sequence as-is, and the second is fed a reversed copy.
 
-To implement this, we train two RNN layers simultaneously. The first layer is fed the input sequence as-is and the second is fed a reversed copy.
+## Hidden Layer — Gated Recurrent Unit (GRU)
 
-<img src="images/bidirectional.png" width="70%" align="center" alt="" title="Bidirectional Layer" />
+Now let's make our RNN a little bit smarter. Instead of allowing all of the information from the hidden state to flow through the network, what if we could be more selective? Perhaps some of the information is more relevant, while other information should be discarded. This is essentially what a gated recurrent unit (GRU) does.
 
-##### &nbsp;
+There are two gates in a GRU: an update gate and a reset gate. This article by Simeon Kostadinov explains these in detail. To summarize, the update gate (z) helps the model determine how much information from previous time steps needs to be passed along to the future. Meanwhile, the reset gate (r) decides how much of the past information to forget.
 
-### Hidden Layer &mdash; Gated Recurrent Unit (GRU)
-Now let's make our RNN a little bit smarter. Instead of allowing _all_ of the information from the hidden state to flow through the network, what if we could be more selective? Perhaps some of the information is more relevant, while other information should be discarded. This is essentially what a gated recurrent unit (GRU) does.
+Image Credit: [analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2020/08/building-bidirectional-rnn-model-python/)
 
-There are two gates in a GRU: an update gate and reset gate. [This article](https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be) by Simeon Kostadinov, explains these in detail. To summarize, the **update gate (z)** helps the model determine how much information from previous time steps needs to be passed along to the future. Meanwhile, the **reset gate (r)** decides how much of the past information to forget.
+## Final Model
 
-##### &nbsp;
+Now that we've discussed the various parts of our model, let's take a look at the code. Again, all of the source code is available [here](// Our Code Link).
 
-<img src="images/gru.png" width="70%" align-center="true" alt="" title="Gated Recurrent Unit (GRU)" />
 
-_Image Credit: [analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2017/12/introduction-to-recurrent-neural-networks/gru/)_
-
-##### &nbsp;
-
-### Final Model
-Now that we've discussed the various parts of our model, let's take a look at the code. Again, all of the source code is available [here in the notebook](machine_translation.ipynb).
-
-```python
-
-def  model_final (input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
+def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     """
     Build and train a model that incorporates embedding, encoder-decoder, and bidirectional RNN
     :param input_shape: Tuple of input shape
@@ -167,12 +157,11 @@ def  model_final (input_shape, output_sequence_length, english_vocab_size, frenc
     """
     # Hyperparameters
     learning_rate = 0.003
-
-    # Build the layers    
+"""
+    # Build the layers
     model = Sequential()
     # Embedding
-    model.add(Embedding(english_vocab_size, 128, input_length=input_shape[1],
-                         input_shape=input_shape[1:]))
+    model.add(Embedding(english_vocab_size, 128, input_length=input_shape[1], input_shape=input_shape[1:]))
     # Encoder
     model.add(Bidirectional(GRU(128)))
     model.add(RepeatVector(output_sequence_length))
@@ -181,86 +170,28 @@ def  model_final (input_shape, output_sequence_length, english_vocab_size, frenc
     model.add(TimeDistributed(Dense(512, activation='relu')))
     model.add(Dropout(0.5))
     model.add(TimeDistributed(Dense(french_vocab_size, activation='softmax')))
-    model.compile(loss=sparse_categorical_crossentropy,
-                  optimizer=Adam(learning_rate),
-                  metrics=['accuracy'])
+    model.compile(loss=sparse_categorical_crossentropy, optimizer=Adam(learning_rate), metrics=['accuracy'])
     return model
-```
-##### &nbsp;
-
-## Results
-The results from the final model can be found in cell 20 of the [notebook](machine_translation.ipynb).
-
-Validation accuracy: 97.5%
-
-Training time: 23 epochs
-
 
 ##### &nbsp;
 
 ## Future Improvements
-If I were to expand on it in the future, here's where I'd start.
 
-1. **Do proper data split (training, validation, test)** &mdash; Currently there is no test set, only training and validation. Obviously this doesn't follow best practices.
-1. **LSTM + attention** &mdash; This has been the de facto architecture for RNNs over the past few years, although there are [some limitations](https://towardsdatascience.com/the-fall-of-rnn-lstm-2d1594c74ce0). I didn't use LSTM because I'd already implemented it in TensorFlow in another project (found [here](https://github.com/tommytracey/udacity/tree/master/deep-learning-nano/projects/4-language-translation#build-the-neural-network)), and I wanted to experiment with GRU + Keras for this project.
-1. **Train on a larger and more diverse text corpus** &mdash; The text corpus and vocabulary for this project are quite small with little variation in syntax. As a result, the model is very brittle. To create a model that generalizes better, you'll need to train on a larger dataset with more variability in grammar and sentence structure.  
-1. **Residual layers** &mdash; You could add residual layers to a deep LSTM RNN, as described in [this paper](https://arxiv.org/abs/1701.03360). Or, use residual layers as an alternative to LSTM and GRU, as described [here](http://www.mdpi.com/2078-2489/9/3/56/pdf).
-1. **Embeddings** &mdash; If you're training on a larger dataset, you should definitely use a pre-trained set of embeddings such as [word2vec](https://mubaris.com/2017/12/14/word2vec/) or [GloVe](https://nlp.stanford.edu/projects/glove/). Even better, use ELMo or BERT.
- - **Embedding Language Model (ELMo)** &mdash; One of the biggest advances in [universal embeddings](https://medium.com/huggingface/universal-word-sentence-embeddings-ce48ddc8fc3a) in 2018 was ELMo, developed by the [Allen Institute for AI](https://allennlp.org). One of the major advantages of ELMo is that it addresses the problem of polysemy, in which a single word has multiple meanings. ELMo is context-based (not word-based), so different meanings for a word occupy different vectors within the embedding space. With GloVe and word2vec, each word has only one representation in the embedding space. For example, the word "queen" could refer to the matriarch of a royal family, a bee, a chess piece, or the 1970s rock band. With traditional embeddings, all of these meanings are tied to a single vector for the word _queen_. With ELMO, these are four distinct vectors, each with a unique set of context words occupying the same region of the embedding space. For example, we'd expect to see words like _queen_, _rook_, and _pawn_ in a similar vector space related to the game of chess. And we'd expect to see _queen_, _hive_, and _honey_ in a different vector space related to bees. This provides a significant boost in semantic encoding.
- - **Bidirectional Encoder Representations from [Transformers](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html) (BERT)**. So far in 2019, the biggest advancement in bidirectional embeddings has been [BERT](https://ai.googleblog.com/2018/11/open-sourcing-bert-state-of-art-pre.html), which was open-sourced by Google. How is BERT different?
-> Context-free models such as word2vec or GloVe generate a single word embedding representation for each word in the vocabulary. For example, the word “bank” would have the same context-free representation in “bank account” and “bank of the river.” Contextual models instead generate a representation of each word that is based on the other words in the sentence. For example, in the sentence “I accessed the bank account,” a unidirectional contextual model would represent “bank” based on “I accessed the” but not “account.” However, BERT represents “bank” using both its previous and next context — “I accessed the ... account” — starting from the very bottom of a deep neural network, making it deeply bidirectional.
-> &mdash;Jacob Devlin and Ming-Wei Chang, [Google AI Blog](https://ai.googleblog.com/2018/11/open-sourcing-bert-state-of-art-pre.html)
+If I were to expand on it in the future, here's where I'd start:
 
-##### &nbsp;
+1. **Do proper data split (training, validation, test):** Currently, there is no test set, only training and validation. To follow best practices, it's important to have a separate test set for evaluating the model's performance.
 
-### Contact
-I hope you found this useful. If you have any feedback, I’d love to hear it. Feel free to post in the comments.
+2. **LSTM + attention:** LSTM with attention has been a popular architecture for RNNs in recent years. It allows the model to focus on specific parts of the input sequence, enhancing its ability to capture important information. Incorporating LSTM with attention could further improve the model's performance.
 
-If you’d like to inquire about collaboration or career opportunities you can find me [here on LinkedIn](https://www.linkedin.com/in/thomastracey/) or view [my portfolio here](https://ttracey.com/).
+3. **Train on a larger and more diverse text corpus:** The current text corpus used for training the model is small and lacks variability in syntax. To create a model that generalizes better and performs well on different types of text data, training on a larger dataset with more diverse grammar and sentence structures would be beneficial.
 
-##### &nbsp;
+4. **Residual layers:** Adding residual layers to a deep LSTM RNN can help alleviate the vanishing gradient problem and improve the flow of information across layers. Residual connections have shown promising results in deep learning architectures.
 
----
+5. **Embeddings:** When training on a larger dataset, utilizing pre-trained word embeddings such as word2vec or GloVe can enhance the model's performance. These embeddings capture rich semantic information and can provide a better representation of words.
 
-# Project Starter Code
-In case you want to run this project yourself, below is the project starter code.
+6. **Embedding Language Model (ELMo):** ELMo, developed by the Allen Institute for AI, offers significant advancements in universal embeddings. It addresses the problem of polysemy, where a single word can have multiple meanings. ELMo provides context-based embeddings, allowing different meanings of a word to occupy distinct vectors within the embedding space. Incorporating ELMo could boost the semantic encoding of the model.
 
-## Setup
-The original Udacity repo for this project can be found [here](https://github.com/udacity/aind2-nlp-capstone).
+7. **Bidirectional Encoder Representations from Transformers (BERT):** BERT, developed by Google, has been a major breakthrough in bidirectional embeddings. Unlike context-free models like word2vec or GloVe, BERT generates word representations based on both previous and next context in a sentence. This bidirectional approach enables a deeper understanding of the word's meaning within the sentence. Exploring BERT-based models could further enhance the model's performance.
 
-This project requires GPU acceleration to run efficiently. Support is available to use either of the following two methods for accessing GPU-enabled cloud computing resources.
+These improvements can contribute to creating a more robust and accurate model for language processing tasks.
 
-### Udacity Workspaces (Recommended)
-
-Udacity Workspaces provide remote connection to GPU-enabled instances right from the classroom. Refer to the classroom lesson for this project to find an overview of navigating & using Jupyter notebook Workspaces.
-
-### Amazon Web Services (Optional)
-
-Please refer to the Udacity instructions for setting up a GPU instance for this project, and refer to the project instructions in the classroom for setup. The recommended AMI should include compatible versions of all required software and libraries to complete the project. [link for AIND students](https://classroom.udacity.com/nanodegrees/nd889/parts/16cf5df5-73f0-4afa-93a9-de5974257236/modules/53b2a19e-4e29-4ae7-aaf2-33d195dbdeba/lessons/2df3b94c-4f09-476a-8397-e8841b147f84/project)
-
-### Install
-- Python 3
-- NumPy
-- TensorFlow 1.x
-- Keras 2.x
-
-## Submission
-When you are ready to submit your project, do the following steps:
-1. Ensure you pass all points on the [rubric](https://review.udacity.com/#!/rubrics/1004/view).
-2. Submit the following in a zip file:
-  - `helper.py`
-  - `machine_translation.ipynb`
-  - `machine_translation.html`
-
-### Converting to HTML
-
-There are several ways to generate an HTML copy of the notebook:
-
- - Running the last cell of the notebook will export an HTML copy
-
- - Navigating to **File -> Download as -> HTML (.html)** within the notebook
-
- - Using `nbconvert` from the command line
-
-    $ pip install nbconvert
-    $ nbconvert machine_translation.ipynb
