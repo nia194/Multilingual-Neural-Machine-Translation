@@ -49,8 +49,6 @@ _Bad translation or extreme carnivorism?_
 
 ##### &nbsp;
 
-# Machine Translation: Bad Translation or Extreme Carnivorism?
-
 ## Approach
 To translate a corpus of English text to French, we need to build a recurrent neural network (RNN). Before diving into the implementation, let's first build some intuition of RNNs and why they're useful for NLP tasks.
 
@@ -72,63 +70,36 @@ We use Keras for the frontend and TensorFlow for the backend in this project. Ke
 #### Load & Examine Data
 The data consists of English sentences as inputs and their corresponding French translations as outputs. The vocabulary size is intentionally kept small for faster model training.
 
-#### Cleaning
-No additional cleaning is required at this point. The data has already been converted to lowercase and split with spaces between words and punctuation.
+## Cleaning
+No additional cleaning needs to be done at this point. The data has already been converted to lowercase and split so that there are spaces between all words and punctuation.
 
-Note: For other NLP projects, additional steps such as removing HTML tags, stop words, or punctuation, or performing entity extraction may be necessary.
+Note: For other NLP projects, you may need to perform additional steps such as removing HTML tags, stop words, punctuation, converting to tag representations, labeling parts of speech, or performing entity extraction.
 
-And this...
+## Tokenization
+Next, we need to tokenize the data, which means converting the text to numerical values. This allows the neural network to perform operations on the input data. For this project, each word and punctuation mark will be given a unique ID. (In other NLP projects, it might make sense to assign each character a unique ID.) The tokenizer creates a word index, which is used to convert each sentence to a vector.
 
-_Note:_ For other NLP projects you may need to perform additional steps such as: remove HTML tags, remove stop words, remove punctuation or convert to tag representations, label the parts of speech, or perform entity extraction.  
+## Padding
+When feeding our sequences of word IDs into the model, each sequence needs to be the same length. To achieve this, padding is added to any sequence that is shorter than the maximum length (i.e., shorter than the longest sentence).
 
-### Tokenization
-Next we need to tokenize the data&mdash;i.e., convert the text to numerical values. This allows the neural network to perform operations on the input data. For this project, each word and punctuation mark will be given a unique ID. (For other NLP projects, it might make sense to assign each character a unique ID.)
-
-When we run the tokenizer, it creates a word index, which is then used to convert each sentence to a vector.
-
-> <img src="images/tok.png" width="100%" align="top-left" alt="" title="Tokenizer output" />
-
-### Padding
-When we feed our sequences of word IDs into the model, each sequence needs to be the same length. To achieve this, padding is added to any sequence that is shorter than the max length (i.e. shorter than the longest sentence).
-
-> <img src="images/padding.png" width="50%" align="top-left" alt="" title="Tokenizer output" />
-
-### One-Hot Encoding (not used)
-In this project, our input sequences will be a vector containing a series of integers. Each integer represents an English word (as seen above). However, in other projects, sometimes an additional step is performed to convert each integer into a one-hot encoded vector. We don't use one-hot encoding (OHE) in this project, but you'll see references to it in certain diagrams (like the one below). I just didn't want you to get confused.  
-
-<img src="images/RNN-architecture.png" width="40%" align="right" alt="" title="RNN architecture" />
-
-One of the advantages of OHE is efficiency since it can [run at a faster clock rate than other encodings](https://en.wikipedia.org/wiki/One-hot#cite_note-2). The other advantage is that OHE better represents categorical data where there is no ordinal relationship between different values. For example, let's say we're classifying animals as either a mammal, reptile, fish, or bird. If we encode them as 1, 2, 3, 4 respectively, our model may assume there is a natural ordering between them, which there isn't. It's not useful to structure our data such that mammal comes before reptile and so forth. This can mislead our model and cause poor results. However, if we then apply one-hot encoding to these integers, changing them to binary representations&mdash;1000, 0100, 0010, 0001 respectively&mdash;then no ordinal relationship can be inferred by the model.
-
-But, one of the drawbacks of OHE is that the vectors can get very long and sparse. The length of the vector is determined by the vocabulary, i.e. the number of unique words in your text corpus. As we saw in the data examination step above, our vocabulary for this project is very small&mdash;only 227 English words and 355 French words. By comparison, the [Oxford English Dictionary has 172,000 words](https://en.oxforddictionaries.com/explore/how-many-words-are-there-in-the-english-language/). But, if we include various proper nouns, words tenses, and slang there could be millions of words in each language. For example, [Google's word2vec](http://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/) is trained on a vocabulary of 3 million unique words. If we used OHE on this vocabulary, the vector for each word would include one positive value (1) surrounded by 2,999,999 zeros!
-
-And, since we're using embeddings (in the next step) to further encode the word representations, we don't need to bother with OHE. Any efficiency gains aren't worth it on a data set this small.  
-
-
-##### &nbsp;
+## One-Hot Encoding (not used)
+In this project, our input sequences are vectors containing a series of integers, where each integer represents an English word. We do not use one-hot encoding (OHE) in this project, but you may come across references to it in certain diagrams. OHE can be useful for representing categorical data where there is no ordinal relationship between different values. However, it can lead to long and sparse vectors. Since we are using embeddings in this project to further encode the word representations, we don't need to use OHE on our small dataset.
 
 ## Modeling
-First, let's breakdown the architecture of a RNN at a high level. Referring to the diagram above, there are a few parts of the model we to be aware of:
+First, let's break down the architecture of an RNN at a high level.
 
-1. **Inputs** &mdash; Input sequences are fed into the model with one word for every time step. Each word is encoded as a unique integer or one-hot encoded vector that maps to the English dataset vocabulary.
-1. **Embedding Layers** &mdash; Embeddings are used to convert each word to a vector. The size of the vector depends on the complexity of the vocabulary.
-1. **Recurrent Layers (Encoder)** &mdash; This is where the context from word vectors in previous time steps is applied to the current word vector.
-1. **Dense Layers (Decoder)** &mdash; These are typical fully connected layers used to decode the encoded input into the correct translation sequence.
-1. **Outputs** &mdash; The outputs are returned as a sequence of integers or one-hot encoded vectors which can then be mapped to the French dataset vocabulary.
+Referring to the diagram above, there are a few parts of the model we need to be aware of:
+- Inputs: Input sequences are fed into the model, with one word for every time step. Each word is encoded as a unique integer or one-hot encoded vector that maps to the English dataset vocabulary.
+- Embedding Layers: Embeddings are used to convert each word to a vector representation. The size of the vector depends on the complexity of the vocabulary.
+- Recurrent Layers (Encoder): This is where the context from word vectors in previous time steps is applied to the current word vector.
+- Dense Layers (Decoder): These are typical fully connected layers used to decode the encoded input into the correct translation sequence.
+- Outputs: The outputs are returned as a sequence of integers or one-hot encoded vectors, which can then be mapped to the French dataset vocabulary.
 
-##### &nbsp;
+## Embeddings
+Embeddings allow us to capture more precise syntactic and semantic word relationships by projecting each word into an n-dimensional space. Words with similar meanings occupy similar regions of this space, and the vectors between words represent useful relationships. Training embeddings on a large dataset from scratch requires significant data and computation. However, since our dataset for this project has a small vocabulary and little syntactic variation, we'll train the embeddings ourselves using Keras.
 
-### Embeddings
-Embeddings allow us to capture more precise syntactic and semantic word relationships. This is achieved by projecting each word into n-dimensional space. Words with similar meanings occupy similar regions of this space; the closer two words are, the more similar they are. And often the vectors between words represent useful relationships, such as gender, verb tense, or even geopolitical relationships.
+## Encoder & Decoder
+Our sequence-to-sequence model consists of an encoder and decoder, which are two recurrent networks linked together. The encoder summarizes the input into a context variable (state), and the decoder uses this context to generate the output sequence. Both the encoder and decoder have loops that process each part of the sequence at different time steps. In the encoder, the input word is transformed with the hidden state, and the hidden state is passed to the next time step. In the decoder, the input at each time step is the previous word from the output sequence. The hidden state represents the relevant context flowing through the network.
 
-<img src="images/embedding-words.png" width="100%" align-center="true" alt="" title="Gated Recurrent Unit (GRU)" />
-
-Training embeddings on a large dataset from scratch requires a huge amount of data and computation. So, instead of doing it ourselves, we'd normally use a pre-trained embeddings package such as [GloVe](https://nlp.stanford.edu/projects/glove/) or [word2vec](https://mubaris.com/2017/12/14/word2vec/). When used this way, embeddings are a form of transfer learning. However, since our dataset for this project has a small vocabulary and little syntactic variation, we'll use Keras to train the embeddings ourselves.
-
-##### &nbsp;
-
-### Encoder & Decoder
-Our sequence-to-sequence model links two recurrent networks: an encoder and decoder. The encoder summarizes the input into a context variable, also called the state. This context is then decoded and the output sequence is generated.
 
 ##### &nbsp;
 
