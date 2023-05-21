@@ -103,9 +103,7 @@ Our sequence-to-sequence model consists of an encoder and decoder, which are two
 
 ##### &nbsp;
 
-<img src="images/encoder-decoder-context.png" width="60%" align="top-left" alt="" title="Encoder Decoder" />
-
-_Image credit: [Udacity](https://classroom.udacity.com/nanodegrees/nd101/parts/4f636f4e-f9e8-4d52-931f-a49a0c26b710/modules/c1558ffb-9afd-48fa-bf12-b8f29dcb18b0/lessons/43ccf91e-7055-4833-8acc-0e2cf77696e8/concepts/be468484-4bd5-4fb0-82d6-5f5697af07da)_
+<img src="images/.png" width="60%" align="top-left" alt="" title="Encoder Decoder" />
 
 ##### &nbsp;
 
@@ -113,9 +111,7 @@ Since both the encoder and decoder are recurrent, they have loops which process 
 
 In the example below, it takes four time steps to encode the entire input sequence. At each time step, the encoder "reads" the input word and performs a transformation on its hidden state. Then it passes that hidden state to the next time step. Keep in mind that the hidden state represents the relevant context flowing through the network. The bigger the hidden state, the greater the learning capacity of the model, but also the greater the computation requirements. We'll talk more about the transformations within the hidden state when we cover gated recurrent units (GRU).
 
-<img src="images/encoder-decoder-translation.png" width="100%" align="top-left" alt="" title="Encoder Decoder" />
-
-_Image credit: modified version from [Udacity](https://classroom.udacity.com/nanodegrees/nd101/parts/4f636f4e-f9e8-4d52-931f-a49a0c26b710/modules/c1558ffb-9afd-48fa-bf12-b8f29dcb18b0/lessons/43ccf91e-7055-4833-8acc-0e2cf77696e8/concepts/f999d8f6-b4c1-4cd0-811e-4767b127ae50)_
+<img src="images/.png" width="100%" align="top-left" alt="" title="Encoder Decoder" />
 
 ##### &nbsp;
 
@@ -139,11 +135,11 @@ Now let's make our RNN a little bit smarter. Instead of allowing all of the info
 
 There are two gates in a GRU: an update gate and a reset gate. This article by Simeon Kostadinov explains these in detail. To summarize, the update gate (z) helps the model determine how much information from previous time steps needs to be passed along to the future. Meanwhile, the reset gate (r) decides how much of the past information to forget.
 
-Image Credit: [analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2020/08/building-bidirectional-rnn-model-python/)
+
 
 ## Final Model
 
-Now that we've discussed the various parts of our model, let's take a look at the code. Again, all of the source code is available [here](// Our Code Link).
+Now that we've discussed the various parts of our model, let's take a look at the code. Again, all of the source code is available [here]
 
 
 def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
