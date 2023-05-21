@@ -1,15 +1,26 @@
 
 
-# Machine Translation with RNNs
+# English - French Translator with RNN
 
-##### &nbsp;
+## Synopsis
+English - French Translator with RNN is the capstone project in my AIND.
 
-<img src="images/translation.gif" width="100%" align="top-left" alt="" title="RNN" />
+My translator can achieve 93% accuracy on the word level using a custom dataset that contains:
+- 227 unique words from 1,823,250 words in English
+- 355 unique words from 1,961,295 words in French
 
-*Image credit: [xiandong79.github.io](https://xiandong79.github.io/seq2seq-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86)*
+To implement the translator, I use word embedding and encoding-decoding layers to improve model performance.
 
+The following libraries were used in this project:
+- Tensorflow: Deep Learning library from Google
+- Keras: An API for different libraries to build Deep Learning models
+- Numpy: A library for mathematical operations
 
-##### &nbsp;
+## Repository Structure
+- `machine_translation.html`: My machine translator in HTML
+- `machine_translation.ipynb`: My machine translator in Jupyter Notebook
+- `helper.py`: File reader for machine_translation.ipynb
+- `project_tests.py`: Unit test file
 
 ## Goal
 In this project, we build a deep neural network that functions as part of a machine translation pipeline. The pipeline accepts English text as input and returns the French translation. The goal is to achieve the highest translation accuracy possible.
