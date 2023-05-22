@@ -1,4 +1,4 @@
-<a name="br1"></a>English - French Translator with RNN
+<a name="br1"></a>Japanese - English Translator with RNN
 
 1\. Synopsis
 
