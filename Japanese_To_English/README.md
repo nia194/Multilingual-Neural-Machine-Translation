@@ -1,4 +1,4 @@
-<a name="br1"></a>Japanese - English Translator with RNN
+<a name="br1"></a>Japanese - English Translator with Transformer Model
 
 1\. Synopsis
 
