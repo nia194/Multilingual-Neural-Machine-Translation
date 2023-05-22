@@ -4,7 +4,7 @@
 
 ● Japanese - English Translator with Trabsfomer.
 
-● My translator can archive 93% accuracy on word level from custom dataset that contains
+● My translator can archive 7.79 BLEU score on word level from custom dataset that contains
 
 ○ 62487 words in English
 ○ 62487 words in Japanese
