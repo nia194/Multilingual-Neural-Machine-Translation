@@ -68,3 +68,9 @@ RNN/GRU based Encoder-Decoder        |   0.69       |         0.36             |
 In summary, our project achieved successful multilingual translation. We created models that accurately translate text between different languages, such as German, Italian, French, and Japanese. The results showed promising performance in terms of accuracy and loss metrics. This demonstrates the potential of machine translation in breaking down language barriers and facilitating global communication. Although there is room for further improvement, our project highlights the effectiveness of modern deep-learning techniques in enabling multilingual understanding and connectivity.
 
 
+### Team
+- Nimesh Arora (Team Lead)
+- Dikshant Sagar
+- Shreyas Teli
+- Ashish Gurung
+- Safal Rijal
